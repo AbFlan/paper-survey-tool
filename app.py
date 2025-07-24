@@ -130,12 +130,8 @@ with st.expander("▼要望・フィードバックを送る"):
     send_button = st.button("送信")
 
     if send_button:
-        
-        message = {
-            "text": f'📨新しいフィードバックが届きました:\n {feedback}\n {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-        }
 
-        response = send_feedback_to_slack(message)
+        response = send_feedback_to_slack(feedback)
         if response == "成功":
             st.success("ご意見ありがとうございました！Slackに送信されました。開発に取り込めるよう努力します。")
         elif "空欄" in response:
