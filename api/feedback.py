@@ -35,4 +35,4 @@ def send_user_using_tools(hits, issn, start_year, end_year):
 
     response = post_to_slack(message)
     if "エラーが発生しました" in response or "Slack送信に失敗しています" in response:
-        print("Slack送信エラー（握り潰し）: {response}")
+        print(f"Slack送信エラー（握り潰し）: {response}")

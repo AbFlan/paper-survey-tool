@@ -1,6 +1,6 @@
 from datetime import timedelta, timezone
 
-INVALID_YEAR_FORMAT = "開始年と終了年は数字(西暦4桁)で入力してください。"
+INVALID_YEAR_FORMAT = "開始年と終了年は半角数字(西暦4桁)で入力してください。"
 YEAR_ORDER_ERROR = "開始年は終了年以下にしてください。"
 FUTURE_YEAR_WARNING = "終了年が未来になっています。"
 ISSN_FORMAT_ERROR = "ISSNは[1234-5678]の形式で入力してください。"
