@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from constants import CROSSREF_ROWS
+from constants import CROSSREF_ROWS, JST
 from validation import validation_inputs
 from api.paper_fetch import fetch_total_results ,paper_fetch_batch
 from api.feedback import send_feedback_to_slack, send_user_using_tools
@@ -19,7 +19,7 @@ user_email = st.text_input("連絡用メールアドレスを入力してくだ�
 st.caption("※これはAPI提供元（論文検索サービス）へのマナーとして、リクエストに連絡先を含める必要があるための入力です。")
 st.caption("※入力いただいたメールアドレスを、開発者や第三者が保存・使用することは一切ありません。")
 
-now = datetime.now()
+now = datetime.now(JST)
 
 
 
@@ -56,7 +56,8 @@ if st.button("検索"):
             loop_count, err = fetch_total_results(params=params, headers=headers)
             if err != None:
                 st.warning(err)
-            st.text(f"約{loop_count * CROSSREF_ROWS}件の論文がヒットしました。")
+            if loop_count > 0:
+                st.text(f"論文がヒットしました。データ収集中です、しばらくお待ちください。")
             
             result_df = pd.DataFrame()
 

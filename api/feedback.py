@@ -1,34 +1,38 @@
-import streamlit as st
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
 import os
 
+from constants import JST
+
 
 load_dotenv()
 SLACK_URL = os.getenv("SLACK_URL")
 
-def send_feedback_to_slack(feedback):
-    
-    if not feedback.strip():
-        return "空欄です。"
-
-    message = {
-        "text": f'📨新しいフィードバックが届きました:\n {feedback}\n {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-    }
+def post_to_slack(message: str):
     try:
-        response = requests.post(SLACK_URL, json=message)
+        response = requests.post(SLACK_URL, json={"text": message})
         if response.status_code == 200:
             return "成功"
         else:
             return f"Slack送信に失敗しています {response.status_code}"
     except Exception as e:
         return f"エラーが発生しました: {e}"
+
+
+def send_feedback_to_slack(feedback):
+    if not feedback.strip():
+        return "空欄です。"
+    timestamp = datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
+    message = f'📨新しいフィードバックが届きました:\n {feedback}\n {timestamp}'
+    response = post_to_slack(message=message)
+    return response
+    
     
 def send_user_using_tools(hits, issn, start_year, end_year):
-    message = f'ツールが正常に使用されました:\n 検索ヒット件数: {hits}\n ISSN: {issn} \n開始年: {start_year} \n終了年: {end_year} \n検索時刻:{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-    
-    try:
-        response = send_feedback_to_slack(message)
-    except Exception as e:
-        print("エラー発生、ただしユーザに見せる必要のないエラーのため意図的に握り潰す:", e)
+    timestamp = datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
+    message = f'ツールが正常に使用されました:\n 検索ヒット件数: {hits}\n ISSN: {issn} \n開始年: {start_year} \n終了年: {end_year} \n検索時刻:{timestamp}'
+
+    response = post_to_slack(message)
+    if "エラーが発生しました" in response or "Slack送信に失敗しています" in response:
+        print("Slack送信エラー（握り潰し）: {response}")
