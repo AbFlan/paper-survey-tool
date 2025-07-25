@@ -26,9 +26,8 @@ def send_feedback_to_slack(feedback):
         return f"エラーが発生しました: {e}"
     
 def send_user_using_tools(hits, issn, start_year, end_year):
-    message = {
-        "text": f'ツールが正常に使用されました:\n 検索ヒット件数: {hits}\n ISSN: {issn} \n開始年: {start_year} \n終了年: {end_year} \n検索時刻:{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-    }
+    message = f'ツールが正常に使用されました:\n 検索ヒット件数: {hits}\n ISSN: {issn} \n開始年: {start_year} \n終了年: {end_year} \n検索時刻:{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
+    
     try:
         response = send_feedback_to_slack(message)
     except Exception as e:
